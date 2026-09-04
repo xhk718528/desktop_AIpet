@@ -1,0 +1,5 @@
+# 电脑管家桌宠依赖
+# 推荐用 uv 安装： uv pip install --python .venv/Scripts/python.exe -r requirements.txt
+agno[openai]
+PyQt5
+psutil

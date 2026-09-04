@@ -1,0 +1,28 @@
+# ---- 虚拟环境 ----
+venv/
+.venv/
+
+# ---- 本地密钥（绝不入库）----
+.env
+
+# ---- Python 缓存 ----
+__pycache__/
+*.py[cod]
+*.egg-info/
+*.spec
+
+# ---- 运行日志 ----
+pcpet/logs/
+
+# ---- IDE ----
+.idea/
+.vscode/
+
+# ---- pytest 残留 ----
+pytest-cache-files-*/
+runs/
+
+# ---- 系统 / OS ----
+Thumbs.db
+.DS_Store
+desktop.ini
