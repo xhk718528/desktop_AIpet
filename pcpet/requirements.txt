@@ -3,3 +3,5 @@
 agno[openai]
 PyQt5
 psutil
+sqlalchemy     # 记忆存储（agno SqliteDb）依赖
+python-dotenv  # 读取本地 .env 密钥

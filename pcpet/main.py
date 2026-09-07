@@ -25,10 +25,12 @@ class ChatWorker(QThread):
 
     def run(self):
         text = ""
+        # 记忆身份：短期记忆按 session_id，长期记忆按 user_id（影响 SQLite 存取）
+        run_kwargs = dict(user_id=config.USER_ID, session_id=config.get_session_id())
         try:
             # 优先流式：agno 3.x 文本增量事件为 RunContent
             try:
-                for chunk in self.agent.run(self.message, stream=True):
+                for chunk in self.agent.run(self.message, stream=True, **run_kwargs):
                     ev = getattr(chunk, "event", None)
                     content = getattr(chunk, "content", None)
                     if ev == "RunContent" and isinstance(content, str) and content:
@@ -38,7 +40,7 @@ class ChatWorker(QThread):
                 pass
             # 若流式没拿到任何文本（接口差异/空回复），降级为非流式一次
             if not text:
-                resp = self.agent.run(self.message)
+                resp = self.agent.run(self.message, **run_kwargs)
                 text = getattr(resp, "content", "") or ""
                 if text:
                     self.partial.emit(text)

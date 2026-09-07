@@ -14,6 +14,9 @@ __pycache__/
 # ---- 运行日志 ----
 pcpet/logs/
 
+# ---- 记忆数据（SQLite 库/会话ID，运行数据不入库）----
+pcpet/memory/
+
 # ---- IDE ----
 .idea/
 .vscode/

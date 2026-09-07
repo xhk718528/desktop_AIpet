@@ -37,5 +37,32 @@ WINDOW_WIDTH = 260        # 桌宠窗口宽度
 WINDOW_HEIGHT = 260       # 桌宠窗口高度
 CHAT_WIDTH = 380          # 对话面板宽度
 
+# ---- 记忆与存储（agno 官方方法：SQLite 落盘短期+长期记忆）----
+_BASE = os.path.dirname(os.path.abspath(__file__))
+MEMORY_ROOT = os.path.join(_BASE, "memory")                       # 记忆数据目录
+MEMORY_DB = os.getenv("PCPET_MEMORY_DB", os.path.join(MEMORY_ROOT, "pet_memory.db"))
+SESSION_ID_FILE = os.getenv("PCPET_SESSION_ID_FILE", os.path.join(MEMORY_ROOT, "session_id.txt"))
+USER_ID = os.getenv("PCPET_USER_ID", (os.environ.get("USERNAME") or "local-user"))
+
+
 def ensure_dirs():
     os.makedirs(FILES_DIR, exist_ok=True)
+    os.makedirs(MEMORY_ROOT, exist_ok=True)
+
+
+def get_session_id() -> str:
+    """返回一个稳定的会话 ID（持久化到文件）。
+    这样短期记忆（对话历史）可以在重启程序后仍然延续。
+    """
+    import uuid
+
+    sid = ""
+    if os.path.isfile(SESSION_ID_FILE):
+        with open(SESSION_ID_FILE, "r", encoding="utf-8") as fh:
+            sid = fh.read().strip()
+    if not sid:
+        sid = uuid.uuid4().hex
+        os.makedirs(os.path.dirname(SESSION_ID_FILE), exist_ok=True)
+        with open(SESSION_ID_FILE, "w", encoding="utf-8") as fh:
+            fh.write(sid)
+    return sid
